@@ -1,0 +1,4 @@
+bs4==0.0.1
+html5lib==0.999999999
+pushbullet.py==0.10.0
+PyYAML==3.12
