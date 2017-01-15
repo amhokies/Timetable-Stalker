@@ -9,3 +9,5 @@ A python application to stalk the Virginia Tech course time table
 ![Generating your Pushbullet access token](http://i.imgur.com/veHK8UI.png "Generating your Pushbullet access token")
 
 3. Enter your access token into the pb_token configuration option in config.yml.
+
+4. Install dependencies with `pip install -r requirements.txt`
