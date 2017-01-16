@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
             title = "{} is open!".format(first_course.label)
 
-            if len(courses) == 1:
+            if len(new_open_courses) == 1:
                 message = "{} is open!".format(repr(first_course))
             else:
                 message = "{} and {} others are open!".format(repr(first_course), len(new_open_courses) - 1)
