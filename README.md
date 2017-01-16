@@ -1,6 +1,9 @@
 # Timetable-Stalker
 A python application to stalk the Virginia Tech course time table
 
+## Requirements
+- Atleast Python 3.4 (comes with pip)
+
 ## Setup
 
 1. Create a [Pushbullet](https://www.pushbullet.com/) account and follow their instructions for setting up push notifications on the devices that you want to receive notifications.
