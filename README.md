@@ -13,20 +13,20 @@ A python application to stalk the Virginia Tech course time table
 
 3. Enter your access token into the pb_token configuration option in config.yml.
 
-4. Install dependencies with `pip install -r requirements.txt`
+4. Install dependencies with `pip3 install -r requirements.txt`
 
 ## Usage
 
 ### Monitoring a specific course section by CRN
 
-Usage: `python app.py crn COURSE_REQUEST_NUMBER`
+Usage: `python3 app.py crn COURSE_REQUEST_NUMBER`
 
-Example: `python app.py crn 18143`
+Example: `python3 app.py crn 18143`
 
 ### Monitoring all sections of a course
 
-Usage: `python app.py course "SUBJ_AND_NUM"`
+Usage: `python3 app.py course "SUBJ_AND_NUM"`
 
-Example: `python app.py course "MATH 2214"`
+Example: `python3 app.py course "MATH 2214"`
 
 
