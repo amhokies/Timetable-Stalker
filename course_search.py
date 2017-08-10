@@ -4,7 +4,7 @@ import requests
 
 default_postdata = {
     'CAMPUS': '0',
-    'TERMYEAR': '201701',
+    'TERMYEAR': '201709',
     'CORE_CODE': 'AR%',
     'subj_code': '',
     'CRSE_NUMBER': '',
