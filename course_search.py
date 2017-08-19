@@ -44,7 +44,7 @@ def _get_open_courses(data):
     return open_courses
 
 
-def get_open_courses_by_course(subj, num):
+def get_open_courses_by_course(subj, num, semester):
     """ Get the open courses that match the course subject and number passed in
     :param subj: The subject abbreviation
     :param num: The course number
@@ -55,11 +55,12 @@ def get_open_courses_by_course(subj, num):
 
     postdata['subj_code'] = subj.strip().upper()
     postdata['CRSE_NUMBER'] = num.strip()
+    postdata['TERMYEAR'] = semester
 
     return _get_open_courses(postdata)
 
 
-def get_open_courses_by_crn(crn):
+def get_open_courses_by_crn(crn, semester):
     """ Get the open course that matches the crn passed in
     :param crn: The course request number of the course section
     :return: Returns a list of the open courses that are matched
@@ -68,5 +69,6 @@ def get_open_courses_by_crn(crn):
     postdata = default_postdata.copy()
 
     postdata['crn'] = crn.strip()
+    postdata['TERMYEAR'] = semester
 
     return _get_open_courses(postdata)

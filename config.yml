@@ -1,1 +1,5 @@
 pb_token: ENTER YOUR PUSHBULLET ACCESS TOKEN HERE
+# Acceptable terms are as follows: winter, spring, summer i, summer ii, fall.
+# Note: winter's year should be the old year, not the new one. Ex: winter semester 2017-2018 should be marked as 2017.
+term: fall
+year: 2017
