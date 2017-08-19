@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from datetime import datetime
 from pushbullet import Pushbullet
 import argparse
@@ -26,6 +28,15 @@ if __name__ == '__main__':
         print('When using the course search type, the search term must be two words (the course subject and number')
         exit(1)
 
+    # Thanks to Ethan Gaebel for this term information
+    terms = {
+        "winter" : "12",
+        "spring" : "01",
+        "summer i" : "06",
+        "summer ii" : "07",
+        "fall" : "09"
+    }
+
     config = None
 
     with open('config.yml', 'r') as config_file:
@@ -41,8 +52,15 @@ if __name__ == '__main__':
     elif 'pb_token' not in config:
         print('Config must contain your Pushbullet Access Token!')
         exit(1)
+    elif ('term' not in config) or (config['term'] not in terms):
+        print('No term (or an incorrect term) specified in config!')
+        exit(1)
+    elif 'year' not in config:
+        print('Year not specified in config!')
+        exit(1)
 
     pb = Pushbullet(config['pb_token'])
+    semester = str(config['year'])+terms.get(config['term'])
 
     last_open_courses = list()
 
@@ -50,12 +68,12 @@ if __name__ == '__main__':
         print("Starting check... ", datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
         if search_type == 'crn':
-            courses = course_search.get_open_courses_by_crn(search_term)
+            courses = course_search.get_open_courses_by_crn(search_term, semester)
         else:
             subj = search_term_split[0]
             num = search_term_split[1]
 
-            courses = course_search.get_open_courses_by_course(subj, num)
+            courses = course_search.get_open_courses_by_course(subj, num, semester)
 
         # Get only courses that have opened up since the last check
         new_open_courses = list(set(courses) - set(last_open_courses))

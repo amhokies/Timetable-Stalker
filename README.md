@@ -13,7 +13,9 @@ A python application to stalk the Virginia Tech course time table
 
 3. Enter your access token into the pb_token configuration option in config.yml.
 
-4. Install dependencies with `pip3 install -r requirements.txt`
+4. Enter the term/year you want to search in config.yml.
+
+5. Install dependencies with `pip3 install -r requirements.txt`
 
 ## Usage
 
