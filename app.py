@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 from datetime import datetime
-from pushbullet import Pushbullet
 import argparse
 import course_search
+import sys
 import yaml
 import time
 
@@ -17,15 +17,21 @@ if __name__ == '__main__':
                         help="""The crn or course subject and number.
                                 If using the course subject and number, they must be enclosed in quotation marks.
                                 For instance: \"MATH 2214\" """)
+    parser.add_argument('-p', '--pushbullet', action='store_true', help='Send notification with pushbullet')
+    parser.add_argument('-f', '--config', help='Specify alternative config file')
+    parser.add_argument('-o', '--oneshot', action='store_true', help='Check just once, then exit')
     args = parser.parse_args()
 
     search_type = args.search_type
     search_term = args.search_term
     search_term_split = search_term.split()
 
+    oneshot = args.oneshot
+    use_pushbullet = args.pushbullet
+
     # Check that if the search type is "course", the search term is two words (the subject and course number)
     if search_type == 'course' and not len(search_term_split) == 2:
-        print('When using the course search type, the search term must be two words (the course subject and number')
+        print('When using the course search type, the search term must be two words (the course subject and number', file=sys.stderr)
         exit(1)
 
     # Thanks to Ethan Gaebel for this term information
@@ -38,34 +44,46 @@ if __name__ == '__main__':
     }
 
     config = None
+    config_path = None
+    if args.config is not None:
+        config_path = args.config
+    else:
+        config_path = 'config.yml'
 
-    with open('config.yml', 'r') as config_file:
-        try:
-            config = yaml.load(config_file)
-        except yaml.YAMLError as err:
-            print(err)
-            exit(1)
-
-    if config is None:
-        print('Error with your config')
+    try: 
+        with open(config_path, 'r') as config_file:
+            try:
+                config = yaml.load(config_file)
+            except yaml.YAMLError as err:
+                print(err,file=sys.stderr)
+                exit(1)
+    except FileNotFoundError as err:
+        print('No such config file', file=sys.stderr)
         exit(1)
-    elif 'pb_token' not in config:
-        print('Config must contain your Pushbullet Access Token!')
+    
+    if config is None:
+        print('Error with your config', file=sys.stderr)
+        exit(1)
+    elif use_pushbullet == True and 'pb_token' not in config:
+        print('Config must contain your Pushbullet Access Token!', file=sys.stderr)
         exit(1)
     elif ('term' not in config) or (config['term'] not in terms):
-        print('No term (or an incorrect term) specified in config!')
+        print('No term (or an incorrect term) specified in config!', file=sys.stderr)
         exit(1)
     elif 'year' not in config:
-        print('Year not specified in config!')
+        print('Year not specified in config!', file=sys.stderr)
         exit(1)
 
-    pb = Pushbullet(config['pb_token'])
+    if use_pushbullet is True:
+        from pushbullet import Pushbullet
+        pb = Pushbullet(config['pb_token'])
+
     semester = str(config['year'])+terms.get(config['term'])
 
     last_open_courses = list()
 
     while True:
-        print("Starting check... ", datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        print("Starting check... ", datetime.now().strftime('%Y-%m-%d %H:%M:%S'), file=sys.stderr)
 
         if search_type == 'crn':
             courses = course_search.get_open_courses_by_crn(search_term, semester)
@@ -91,8 +109,11 @@ if __name__ == '__main__':
             else:
                 message = "{} and {} others are open!".format(repr(first_course), len(new_open_courses) - 1)
 
-            pb.push_note(title, message)
+            if use_pushbullet == True:
+                pb.push_note(title, message)
 
             print(message)
+            if oneshot == True:
+                exit(0)
 
         time.sleep(30)
