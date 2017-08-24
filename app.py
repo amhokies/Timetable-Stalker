@@ -18,6 +18,7 @@ if __name__ == '__main__':
                                 If using the course subject and number, they must be enclosed in quotation marks.
                                 For instance: \"MATH 2214\" """)
     parser.add_argument('-p', '--pushbullet', action='store_true', help='Send notification with pushbullet')
+    parser.add_argument('-d', '--desktop', action='store_true', help='Send alert via libnotify')
     parser.add_argument('-f', '--config', help='Specify alternative config file')
     parser.add_argument('-o', '--oneshot', action='store_true', help='Check just once, then exit')
     args = parser.parse_args()
@@ -28,6 +29,7 @@ if __name__ == '__main__':
 
     oneshot = args.oneshot
     use_pushbullet = args.pushbullet
+    use_libnotify = args.desktop
 
     # Check that if the search type is "course", the search term is two words (the subject and course number)
     if search_type == 'course' and not len(search_term_split) == 2:
@@ -74,9 +76,14 @@ if __name__ == '__main__':
         print('Year not specified in config!', file=sys.stderr)
         exit(1)
 
-    if use_pushbullet is True:
+    if use_pushbullet == True:
         from pushbullet import Pushbullet
         pb = Pushbullet(config['pb_token'])
+
+    if use_libnotify == True:
+        import notify2
+        notify2.init("Timetable-Stalker")
+
 
     semester = str(config['year'])+terms.get(config['term'])
 
@@ -111,6 +118,9 @@ if __name__ == '__main__':
 
             if use_pushbullet == True:
                 pb.push_note(title, message)
+
+            if use_libnotify == True:
+                notify2.Notification(title, message, "emblem-important").show()
 
             print(message)
             if oneshot == True:
