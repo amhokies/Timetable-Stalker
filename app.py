@@ -123,7 +123,8 @@ if __name__ == '__main__':
                 notify2.Notification(title, message, "emblem-important").show()
 
             print(message)
-            if oneshot == True:
-                exit(0)
+
+        if oneshot == True:
+            exit(0)
 
         time.sleep(30)
