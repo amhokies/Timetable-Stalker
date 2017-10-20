@@ -1,0 +1,6 @@
+#for pushbullet
+pushbullet.py==0.10.0
+
+#for libnotify
+notify2==0.3.1
+dbus-python==1.2.4

@@ -2,7 +2,7 @@
 A python application to stalk the Virginia Tech course time table
 
 ## Requirements
-- Atleast Python 3.4 (comes with pip)
+- At least Python 3.4 (comes with pip)
 
 ## Setup
 
@@ -11,11 +11,11 @@ A python application to stalk the Virginia Tech course time table
 2. Create your Pushbullet access token by going to your Pushbullet [account settings](https://www.pushbullet.com/#settings/account)
 ![Generating your Pushbullet access token](http://i.imgur.com/veHK8UI.png "Generating your Pushbullet access token")
 
-3. Enter your access token into the pb_token configuration option in config.yml.
+3. Enter your access token into the `pb_token` configuration option in config.yml.
 
 4. Enter the term/year you want to search in config.yml.
 
-5. Install dependencies with `pip3 install -r requirements.txt`
+5. Install dependencies with `pip3 install -r requirements.txt; pip3 install -r optional.txt`
 
 ## Usage
 
@@ -31,4 +31,22 @@ Usage: `python3 app.py course "SUBJ_AND_NUM"`
 
 Example: `python3 app.py course "MATH 2214"`
 
+### Command Line Flags
 
+    usage: app.py [-h] [-p] [-d] [-f CONFIG] [-o] {crn,course} search_term
+    
+    positional arguments:
+      {crn,course}          Whether to monitor a course by crn or by the course
+                            subject and number
+      search_term           The crn or course subject and number. If using the
+                            course subject and number, they must be enclosed in
+                            quotation marks. For instance: "MATH 2214"
+    
+    optional arguments:
+      -h, --help            show this help message and exit
+      -p, --pushbullet      Send notification with pushbullet
+      -d, --desktop         Send alert via libnotify
+      -f CONFIG, --config CONFIG
+                            Specify alternative config file
+      -o, --oneshot         Check just once, then exit
+    
