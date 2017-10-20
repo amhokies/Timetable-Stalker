@@ -46,7 +46,6 @@ if __name__ == '__main__':
     }
 
     config = None
-    config_path = None
     if args.config is not None:
         config_path = args.config
     else:
@@ -66,7 +65,7 @@ if __name__ == '__main__':
     if config is None:
         print('Error with your config', file=sys.stderr)
         exit(1)
-    elif use_pushbullet == True and 'pb_token' not in config:
+    elif use_pushbullet and 'pb_token' not in config:
         print('Config must contain your Pushbullet Access Token!', file=sys.stderr)
         exit(1)
     elif ('term' not in config) or (config['term'] not in terms):
@@ -76,11 +75,11 @@ if __name__ == '__main__':
         print('Year not specified in config!', file=sys.stderr)
         exit(1)
 
-    if use_pushbullet == True:
+    if use_pushbullet:
         from pushbullet import Pushbullet
         pb = Pushbullet(config['pb_token'])
 
-    if use_libnotify == True:
+    if use_libnotify:
         import notify2
         notify2.init("Timetable-Stalker")
 
@@ -116,7 +115,7 @@ if __name__ == '__main__':
             else:
                 message = "{} and {} others are open!".format(repr(first_course), len(new_open_courses) - 1)
 
-            if use_pushbullet == True:
+            if use_pushbullet:
                 pb.push_note(title, message)
 
             if use_libnotify == True:
@@ -124,7 +123,7 @@ if __name__ == '__main__':
 
             print(message)
 
-        if oneshot == True:
+        if oneshot:
             exit(0)
 
         time.sleep(30)
