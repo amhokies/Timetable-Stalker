@@ -66,33 +66,36 @@ if __name__ == '__main__':
 
     while True:
         print("Starting check... ", datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-
-        if search_type == 'crn':
-            courses = course_search.get_open_courses_by_crn(search_term, semester)
-        else:
-            subj = search_term_split[0]
-            num = search_term_split[1]
-
-            courses = course_search.get_open_courses_by_course(subj, num, semester)
-
-        # Get only courses that have opened up since the last check
-        new_open_courses = list(set(courses) - set(last_open_courses))
-        last_open_courses = courses
-
-        if len(new_open_courses) == 0:
-            print("No new courses found!!!")
-        else:
-            first_course = new_open_courses[0]
-
-            title = "{} is open!".format(first_course.label)
-
-            if len(new_open_courses) == 1:
-                message = "{} is open!".format(repr(first_course))
+        try:
+            if search_type == 'crn':
+                courses = course_search.get_open_courses_by_crn(search_term, semester)
             else:
-                message = "{} and {} others are open!".format(repr(first_course), len(new_open_courses) - 1)
+                subj = search_term_split[0]
+                num = search_term_split[1]
 
-            pb.push_note(title, message)
+                courses = course_search.get_open_courses_by_course(subj, num, semester)
 
-            print(message)
+            # Get only courses that have opened up since the last check
+            new_open_courses = list(set(courses) - set(last_open_courses))
+            last_open_courses = courses
+
+            if len(new_open_courses) == 0:
+                print("No new courses found!!!")
+            else:
+                first_course = new_open_courses[0]
+
+                title = "{} is open!".format(first_course.label)
+
+                if len(new_open_courses) == 1:
+                    message = "{} is open!".format(repr(first_course))
+                else:
+                    message = "{} and {} others are open!".format(repr(first_course), len(new_open_courses) - 1)
+
+                pb.push_note(title, message)
+
+                print(message)
+        
+        except Exception as e:
+            print("Error getting courses.")
 
         time.sleep(30)
